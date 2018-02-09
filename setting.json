@@ -1,0 +1,13 @@
+{
+  "version": "0.1",
+  "data" : {
+    "app" : "data/app.json"
+  },
+  "background": {
+    "file" : "image/background.jpg" ,
+    "color" : "#4C4A48"
+  },
+  "taskbar" : {
+    "position" : "left"
+  }
+}

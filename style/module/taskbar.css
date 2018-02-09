@@ -1,0 +1,181 @@
+.taskbar{
+    position: fixed;
+    z-index: 10;
+    left: 0px;
+    top: 0px;
+    bottom: 0px;
+    right: auto;
+    width: 50px;
+    background: rgba(0,0,0,0.7);
+}
+.taskbar .btn-start{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 50px;
+    height: 50px;
+}
+.taskbar .btn-start .inner{
+    width: 24px;
+    height: 24px;
+    margin: 13px;
+    background: url("../../image/light.png") center center no-repeat;
+    background-size: 100% 100%;
+}
+.taskbar .task{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 50px;
+    bottom: 0px;
+}
+.taskbar .task .list{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 25px;
+}
+.taskbar .task .list .item{
+    width: 50px;
+    height: 50px;
+    padding: 3px 0px;
+}
+.taskbar .task .list .item .inner{
+    height: 44px;
+    color: white;
+    line-height: 49px;
+    text-align: center;
+    border-left: 2px solid rgba(255,255,255,0.3);
+}
+.taskbar .task .list .item .inner i{
+    font-size: 24px;
+}
+.taskbar .task .list .item:hover{
+    padding: 0px;
+    background: rgba(255,255,255,0.15);
+}
+.taskbar .task .list .item:hover .inner,
+.taskbar .task .list .item.active .inner{
+    height: 50px;
+    line-height: 55px;
+}
+.taskbar .task .list .item.active{
+    background: rgba(255,255,255,0.3);
+    padding: 0px;
+}
+
+.taskbar .tray{
+    position: absolute;
+    bottom: 10px;
+    left: 0px;
+    right: 0px;
+    padding: 5px 0px;
+}
+.taskbar .tray .item{
+    padding: 5px;
+    text-align: center;
+    color: white;
+}
+
+.taskbar .show-desktop{
+    height: 10px;
+    border-top: 1px solid rgba(255,255,255,0.3);
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+.taskbar .show-desktop:hover{
+    background: rgba(255,255,255,0.15);
+}
+
+
+
+/* 横向 */
+.taskbar-horizontal .taskbar{
+    width: auto;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 50px;
+}
+.taskbar-horizontal .taskbar .task{
+    left: 50px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+.taskbar-horizontal .taskbar .task .item{
+    display: inline-block;
+    padding: 0px 3px;
+    vertical-align: top;
+}
+.taskbar-horizontal .taskbar .task .list .item .inner{
+    height: 50px;
+    line-height: 55px;
+    width: auto;
+}
+
+.taskbar-horizontal .taskbar .show-desktop{
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    left: auto;
+    width: 10px;
+    height: auto;
+    border-top: 0px;
+    border-left: 1px solid rgba(255,255,255,0.3);
+}
+.taskbar-horizontal .taskbar .tray{
+    right: 10px;
+    top: 0px;
+    bottom: 0px;
+    left: auto;
+    padding: 0px 5px;
+}
+.taskbar-horizontal .taskbar .tray .item{
+    display: inline-block;
+    height: 50px;
+    line-height: 40px;
+}
+
+/* 在右侧 */
+.taskbar-right .taskbar{
+    left: auto;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+}
+.taskbar-right .taskbar .task .list .item .inner{
+    border: 0px;
+}
+.taskbar-right .taskbar .task .list .item .inner{
+    border-right: 2px solid rgba(255,255,255,0.3);
+}
+/* 在顶部 */
+.taskbar-top .taskbar{
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: auto;
+}
+.taskbar-top .taskbar .task .list .item .inner{
+    border: 0px;
+}
+.taskbar-top .taskbar .task .list .item .inner{
+    border-top: 2px solid rgba(255,255,255,0.3);
+}
+/* 在底部 */
+.taskbar-bottom .taskbar{
+    left: 0px;
+    right: 0px;
+    top: auto;
+    bottom: 0;
+}
+.taskbar-bottom .taskbar .task .list .item .inner{
+    border: 0px;
+}
+.taskbar-bottom .taskbar .task .list .item .inner{
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+}

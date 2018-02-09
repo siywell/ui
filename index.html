@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <title>Siywell OS - UI Framework</title>
+    <link rel="stylesheet" href="style/main.css"/>
+</head>
+<body>
+<!-- 桌面壁纸 -->
+<div class="background">
+    <div class="helper"></div>
+    <div class="inner"></div>
+</div>
+<div class="desktop"></div>
+<!-- 任务栏 -->
+<div class="taskbar">
+    <div class="btn-start"><div class="inner"></div></div>
+    <div class="task">
+        <div class="list">
+            <div class="item"><div class="inner"><i class="fa fa-cog"></i></div>
+            </div><div class="item active"><div class="inner"><i class="fa fa-cube"></i></div></div>
+        </div>
+        <div class="nav">
+            <div class="btn-prev"></div>
+            <div class="btn-next"></div>
+        </div>
+    </div>
+    <div class="tray">
+        <div class="item"><i class="fa fa-cog"></i>
+        </div><div class="item"><i class="fa fa-cube"></i></div>
+    </div>
+    <div class="show-desktop"></div>
+</div>
+<div class="loading"></div>
+<script src="plugin/require.js" data-main="script/main" data-config="setting.json"></script>
+</body>
+</html>

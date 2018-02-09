@@ -1,0 +1,20 @@
+.background{
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    z-index: 1;
+}
+.background .helper{
+    visibility: visible;
+}
+.background .inner{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    background: #4C4A48 no-repeat center center;
+    background-size: 100% 100%;
+}

@@ -14,11 +14,6 @@ define(function (require) {
     var background = require("background");
     var jquery = require("siywell-jquery");
     var popup = require("popup");
-    try{
-        var popup1 = require("popup1");
-    }catch (e){
-        console.log(e);
-    }
 
     var eventMap = {};
     var onceMap = {};
@@ -40,7 +35,6 @@ define(function (require) {
         background.init();
         desktop.init();
         taskbar.init();
-        popup.init();
 
         //打开窗口
         popup.open({

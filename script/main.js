@@ -11,6 +11,8 @@ require.config({
         "font" : "plugin/font-awesome-4.7.0/js/font-awesome" ,
 
         //Siywell OS 组件
+        "util" : "script/module/util" ,
+
         "siywell" : "script/module/siywell" ,
         "siywell-jquery" : "script/module/jquery" ,
         "desktop" : "script/module/desktop" ,

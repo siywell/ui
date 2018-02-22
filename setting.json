@@ -4,7 +4,7 @@
     "app" : "data/app.json"
   },
   "background": {
-    "file" : "image/background.jpg" ,
+    "file" : "assets/image/background.jpg" ,
     "color" : "#4C4A48"
   },
   "taskbar" : {

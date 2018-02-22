@@ -1,0 +1,71 @@
+.popup{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 500px;
+    height: 400px;
+    background: white;
+    border: 1px solid #5C5A58;
+}
+.popup-hidden{
+    visibility: hidden;
+}
+.popup > .title-bar{
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 30px;
+}
+.popup > .title-bar .icon{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 33px;
+}
+.popup > .title-bar .title{
+    line-height: 30px;
+    margin-left: 30px;
+    margin-right: 135px;
+}
+.popup > .title-bar > .action{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+.popup > .title-bar > .action .item{
+    display: inline-block;
+    width: 45px;
+    height: 30px;
+    background-image: url("popup/actions.png");
+}
+ .popup > .title-bar > .action .item:hover{
+    background-color: #E5E5E5;
+ }
+.popup > .title-bar > .action .item.min{
+    background-position: 0px 0px;
+}
+.popup > .title-bar > .action .item.max{
+    background-position: -50px 0px;
+}
+.popup > .title-bar > .action .item.re{
+    background-position: -100px 1px;
+    display: none;
+}
+.popup > .title-bar > .action .item.exit{
+    background-position: -150px 0px;
+}
+.popup > .title-bar > .action .item.exit:hover{
+    background-color: #E81123;
+}
+
+.popup > .body{
+    position: absolute;
+    top: 30px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}

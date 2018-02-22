@@ -4,13 +4,21 @@
 define(function (require) {
     //jQuery支持库
     var $ = require("jquery");
-    require(["jquery-ui","bootstrap","font"]);
+    require("jquery-ui");
+    require("bootstrap");
+    require("font");
 
     //加载桌面组件
     var taskbar = require("taskbar");
     var desktop = require("desktop");
     var background = require("background");
     var jquery = require("siywell-jquery");
+    var popup = require("popup");
+    try{
+        var popup1 = require("popup1");
+    }catch (e){
+        console.log(e);
+    }
 
     var eventMap = {};
     var onceMap = {};
@@ -32,6 +40,12 @@ define(function (require) {
         background.init();
         desktop.init();
         taskbar.init();
+        popup.init();
+
+        //打开窗口
+        popup.open({
+            url : "assets/html/demo.html"
+        });
     }
 
     var initBind = function(){
@@ -121,7 +135,7 @@ define(function (require) {
             var config = script.data("config");
             $.ajax({
                 url : config ,
-                type : "post" ,
+                type : "get" ,
                 complete : function(xhr,status){
                     if(xhr.responseJSON) $.extend(setting,xhr.responseJSON);
                     call();
@@ -135,11 +149,16 @@ define(function (require) {
         return setting;
     }
 
+    var module = function (name) {
+        return require(name);
+    }
+
     return {
         init : init ,
         bind : bind ,
         once : once ,
         trigger : trigger ,
-        setting : setting
+        setting : setting ,
+        module : module
     }
 });

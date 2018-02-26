@@ -20,6 +20,9 @@ define(function (require) {
         position : "left"
     }
 
+    /**
+     * 初始化
+     */
     var init = function () {
         siywell = require("siywell");
 
@@ -32,6 +35,89 @@ define(function (require) {
         })
     }
 
+    /**
+     * 设置位置
+     * @param position
+     */
+    var position = function(position){
+        setting.position = position;
+        var type = "horizontal";
+        if(position == "left" || position == "right")
+            type = "vertical";
+        body.removeClass("taskbar-left");
+        body.removeClass("taskbar-right");
+        body.removeClass("taskbar-bottom");
+        body.removeClass("taskbar-top");
+        body.removeClass("taskbar-horizontal");
+        body.removeClass("taskbar-vertical");
+
+        body.addClass("taskbar-" + position);
+        body.addClass("taskbar-" + type);
+        resize();
+    }
+
+    /**
+     * 重置大小
+     */
+    var resize = function(){
+
+    }
+
+
+
+
+    /**
+     * 任务栏项目
+     * @param param
+     * @constructor
+     */
+    var Task = function (param) {
+        var self = this;
+        Component.call(this);
+        var config = {
+            title : "" ,
+            id : null ,
+            icon : null ,
+            container : ".taskbar > .task > .list"
+        }
+        var html = '<div class="item tooltip-helper"><div class="inner"><i class="fa fa-cube"></i></div></div>';
+        var object = null;
+
+        var init = function () {
+            $.extend(config,param);
+            object = $(html);
+            object.appendTo(config.container);
+            object.data("title",config.title);
+            object.click(function (e) {
+                self.trigger("click",[e]);
+            })
+        }
+
+        var close = function () {
+            if(object)
+                object.remove();
+        }
+
+        this.close = close;
+
+        init();
+    }
+
+    /**
+     * 添加任务栏按钮
+     * @param param
+     * @returns {Task}
+     */
+    var addTask = function (param) {
+        return new Task(param);
+    }
+
+
+
+
+    /**
+     * 内部方法
+     */
     var initSetting = function(){
         $.extend(setting,siywell.setting.taskbar);
     }
@@ -50,29 +136,11 @@ define(function (require) {
         obj.showDesktop = obj.taskbar.find(".show-desktop");
     }
 
-    var position = function(position){
-        setting.position = position;
-        var type = "horizontal";
-        if(position == "left" || position == "right")
-            type = "vertical";
-        body.removeClass("taskbar-left");
-        body.removeClass("taskbar-right");
-        body.removeClass("taskbar-bottom");
-        body.removeClass("taskbar-top");
-        body.removeClass("taskbar-horizontal");
-        body.removeClass("taskbar-vertical");
-
-        body.addClass("taskbar-" + position);
-        body.addClass("taskbar-" + type);
-        resize();
-    }
-
-    var resize = function(){
-
-    }
-
     return {
         init : init ,
-        position : position
+        position : position ,
+        resize : resize ,
+
+        addTask : addTask
     }
 });

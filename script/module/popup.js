@@ -19,8 +19,12 @@ define(function (require) {
 
     var Popup = function(param){
         var self = this;
+        Component.call(this);
         var object = null;
         var util = require("util");
+
+        var task = null;
+
         //默认配置
         var config = {
             id : util.uuid(),
@@ -30,6 +34,8 @@ define(function (require) {
             minable : true ,
             maxable : true ,
             closeable : true ,
+            draggable : true ,
+            resizable : true ,
             icon : "fa fa-cube" ,
             container : ".desktop" ,
             task : true ,
@@ -62,16 +68,98 @@ define(function (require) {
                 html(config.html);
                 center();
             }
+            initTask();
+            //显示出来后，在顶部
+            toTop();
+        }
+
+        var initTask = function () {
+            if(!config.task){
+                return;
+            }
+            task = taskbar.addTask({
+                id : config.id ,
+                title : config.title ,
+                icon : config.icon
+            });
+            self.bind("close",function () {
+                task.close();
+            })
+            task.bind("click",function (e) {
+                if(self.isMin()){
+                    self.unmin();
+                    toTop();
+                }else{
+                    if(isTop()){
+                        self.min();
+                    }else{
+                        toTop();
+                    }
+                }
+            })
         }
 
         var initObject = function () {
-            object.draggable();
-            object.resizable();
+            object.click(function () {
+                toTop();
+            })
+            object.draggable({
+                handle : ".title-bar > .title" ,
+                start : function (e,helper) {
+                    toTop();
+                    if(object.hasClass("mode-max") || object.hasClass("mode-min"))
+                        return false;
+                    return config.draggable;
+                },
+                stop : function (e,helper) {
+                    var position = helper.position;
+                    top(position.top);
+                    left(position.left);
+                },
+                drag : function (e,helper) {
+                }
+            });
+            object.resizable({
+                helper: "ui-resizable-helper" ,
+                start : function (e,helper) {
+                    toTop();
+                    if(object.hasClass("mode-max") || object.hasClass("mode-min"))
+                        return false;
+                    return config.resizable;
+                },
+                stop : function (e,helper) {
+                    var size = helper.size;
+                    height(size.height);
+                    width(size.width);
+                },
+                resize : function (e,helper) {
+                }
+            });
             object.data("popup",self);
+
+            object.delegate(".title-bar .item.exit","click",function () {
+                close();
+            });
+            object.delegate(".title-bar .item.max","click",function () {
+                max();
+            });
+            object.delegate(".title-bar .item.min","click",function () {
+                min();
+            });
+            object.delegate(".title-bar .item.re","click",function () {
+                unmax();
+            });
+            object.delegate(".title-bar .title","dblclick",function () {
+                if(object.hasClass("mode-max")){
+                    unmax();
+                }else{
+                    max();
+                }
+            });
         }
 
         var setting = function (setting) {
-            var popup = this;
+            var popup = self;
             if(object == null)
                 return;
             $.extend(config,setting);
@@ -79,9 +167,9 @@ define(function (require) {
                 if(i == "html" || i == "url")
                     continue;
                 var callback = popup[i];
-                if(typeof callback == ""){
+                if(typeof callback == "function"){
                     try{
-                        callback(id,config[i]);
+                        callback(config[i]);
                     }catch (e){
                         console.log(e);
                     }
@@ -97,6 +185,7 @@ define(function (require) {
             if(object == null)
                 return;
             object.css("top",top+"px");
+            self.trigger("position",[{type:"top",value:top}]);
         }
 
         var left = function(left){
@@ -107,6 +196,7 @@ define(function (require) {
             if(object == null)
                 return;
             object.css("left",left+"px");
+            self.trigger("position",[{type:"left",value:top}]);
         }
 
         var height = function(height){
@@ -117,6 +207,7 @@ define(function (require) {
             if(object == null)
                 return;
             object.height(height);
+            self.trigger("resize",[{type:"height",value:height}]);
         }
 
         var width = function(width){
@@ -127,6 +218,7 @@ define(function (require) {
             if(object == null)
                 return;
             object.width(width);
+            self.trigger("resize",[{type:"width",value:width}]);
         }
 
         var center = function(){
@@ -149,6 +241,47 @@ define(function (require) {
             });
         }
 
+        /**
+         * 去顶部
+         */
+        var toTop = function () {
+            if(isTop())
+                return;
+            var topPopup = getTop();
+            var topZ = 100;
+            if(topPopup != null){
+                var z = Number(topPopup.css("z-index"));
+                topZ = z + 1;
+            }
+            object.css("z-index",topZ);
+        }
+        
+        var isTop = function () {
+            var topPopup = getTop();
+            return object.is(topPopup);
+        }
+        
+        var getTop = function () {
+            var container = $(config.container);
+            var popups = container.find("div.popup");
+            var startZ = 0;
+            var topPopup = null;
+            popups.each(function (i) {
+                var popup = popups.eq(i);
+                var z = Number(popup.css("z-index"));
+                if(z > startZ){
+                    startZ = z ;
+                    topPopup = popup;
+                }
+            })
+            return topPopup;
+        }
+
+        /**
+         * 设置内容
+         * @param htmlString
+         * @returns {null}
+         */
         var html = function (htmlString) {
             if(typeof htmlString == "undefined")
                 return config.html;
@@ -161,9 +294,38 @@ define(function (require) {
             object.removeClass("popup-hidden");
         }
 
-        var getPopupById = function(id){
-            var object = $(".popup#"+id);
-            return object;
+        var close = function () {
+            if(object)
+                object.remove();
+            self.trigger("close");
+        }
+
+        var max = function () {
+            if(!object)
+                return;
+            object.addClass("mode-max");
+        }
+
+        var min = function () {
+            if(!object)
+                return;
+            object.addClass("mode-min");
+        }
+
+        var unmax = function () {
+            if(!object)
+                return;
+            object.removeClass("mode-max");
+        }
+
+        var unmin = function () {
+            if(!object)
+                return;
+            object.removeClass("mode-min");
+        }
+
+        var isMin = function () {
+            return object.hasClass("mode-min");
         }
 
         //对外暴露方法
@@ -175,6 +337,17 @@ define(function (require) {
         this.top = top;
         this.left = left;
         this.setting = setting;
+        this.close = close;
+        this.max = max;
+        this.min = min;
+        this.unmax = unmax;
+        this.unmin = unmin;
+        this.isMin = isMin;
+
+        var getPopupById = function(id){
+            var object = $(".popup#"+id);
+            return object;
+        }
 
         //构造函数
         init(param);

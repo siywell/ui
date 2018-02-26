@@ -35,6 +35,7 @@ define(function (require) {
         background.init();
         desktop.init();
         taskbar.init();
+        initEvent();
 
         //打开窗口
         popup.open({
@@ -44,6 +45,69 @@ define(function (require) {
 
     var initBind = function(){
         bind("setting.change",function(){
+        });
+    }
+
+    var initEvent = function () {
+        var doc = $(document);
+        doc.delegate(".tooltip-helper","mouseenter",function (e) {
+            var helper = $(this);
+            var timer = helper.data("timer");
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                var tooltip = helper.data("tooltip");
+                if(!tooltip){
+                    tooltip = $('<div class="tooltip-panel hide"></div>');
+                    tooltip.appendTo("body");
+                    helper.data("tooltip",tooltip);
+                }
+                if(!tooltip.hasClass("hide"))
+                    return;
+                tooltip.removeClass("hide");
+                tooltip.html(helper.data("title"));
+                var position = helper.data("position");
+                //位置
+                var win = $(window);
+                if(position.top + tooltip.height() > win.height()){
+                    position.top = win.height() - tooltip.height() - 5;
+                }else{
+                    position.top = position.top + 5;
+                }
+                if(position.left + tooltip.width() > win.width()){
+                    position.left = win.width() - tooltip.width() - 5;
+                }else{
+                    position.left = position.left + 5;
+                }
+                tooltip.css("top",position.top+"px");
+                tooltip.css("left",position.left+"px");
+                tooltip.stop().animate({
+                    opacity : 1
+                },200);
+            },300);
+            helper.data("timer",timer);
+        }).delegate(".tooltip-helper","mouseleave",function (e) {
+            hideTooltip($(this));
+        }).delegate(".tooltip-helper","mousemove",function (e) {
+            var helper = $(this);
+            helper.data("position",{
+                left : e.clientX ,
+                top : e.clientY
+            })
+        }).delegate(".tooltip-helper","click",function (e) {
+            hideTooltip($(this));
+        });
+    }
+    
+    var hideTooltip = function (helper) {
+        var timer = helper.data("timer");
+        clearTimeout(timer);
+        var tooltip = helper.data("tooltip");
+        if(!tooltip)
+            return;
+        tooltip.stop().animate({
+            opacity : 0
+        }, 200 , function () {
+            tooltip.addClass("hide");
         });
     }
 
@@ -146,6 +210,55 @@ define(function (require) {
     var module = function (name) {
         return require(name);
     }
+
+
+
+
+    var Component = function(){
+        var events = {};
+
+        /**
+         * 绑定事件
+         * @param name
+         * @param callback
+         */
+        var bind = function (name,callback) {
+            var eventArray = events[name];
+            if(!eventArray){
+                events[name] = new Array();
+                eventArray = events[name];
+            }
+            eventArray.push(callback);
+        }
+
+        /**
+         * 触发事件
+         * @param name
+         * @param params
+         */
+        var trigger = function (name,params) {
+            var eventArray = events[name];
+            if(!eventArray){
+                return;
+            }
+            $.each(eventArray,function (i) {
+                var call = eventArray[i];
+                if(typeof call == "function"){
+                    try{
+                        call(params);
+                    }catch (e){
+                        console.log(e);
+                    }
+                }
+            })
+        }
+
+        this.bind = bind;
+        this.trigger = trigger;
+    }
+    window.Component = Component;
+
+
 
     return {
         init : init ,

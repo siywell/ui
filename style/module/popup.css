@@ -6,7 +6,31 @@
     height: 400px;
     background: white;
     border: 1px solid #5C5A58;
+    z-index: 100;
+    box-shadow: 0 0 24px rgba(0,0,0,.18);
 }
+.popup.mode-max{
+    box-shadow: none;
+    border: none;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.popup.mode-max .ui-resizable-handle{
+    display: none;
+}
+.popup.mode-max > .title-bar > .action .item.max{
+    display: none;
+}
+.popup.mode-max > .title-bar > .action .item.re{
+    display: inline-block;
+}
+.popup.mode-min{
+    left: -100000px !important;
+    top: -100000px !important;
+}
+
 .popup-hidden{
     visibility: hidden;
 }
